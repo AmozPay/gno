@@ -305,7 +305,7 @@ Checks if the receiver realm is an ephemeral realm.
 
 ##### Usage
 ```go
-if r.IsUserCall() {...}
+if r.IsEphemeral() {...}
 ```
 ---
 
