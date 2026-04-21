@@ -7,7 +7,7 @@ import (
 	"github.com/gnolang/gno/tm2/pkg/version"
 )
 
-func NewVersionCmd(io commands.IO) *commands.Command {
+func NewVersionCmd(rootCfg *BaseCfg, io commands.IO) *commands.Command {
 	return commands.NewCommand(
 		commands.Metadata{
 			Name:       "version",
