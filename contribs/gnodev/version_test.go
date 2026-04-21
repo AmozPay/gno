@@ -12,7 +12,6 @@ import (
 )
 
 func TestClient_Version(t *testing.T) {
-	t.Parallel()
 
 	// Initialize stdout listener
 	mockOutput := bytes.NewBufferString("")
@@ -22,6 +21,7 @@ func TestClient_Version(t *testing.T) {
 	// Initialize version command
 	versionCmd := newVersionCmd(io)
 	versionValues := []string{"develop", "chain/test4.2"}
+	originalVersion := version.Version
 
 	// test: version settled
 	version.Version = versionValues[1]
@@ -34,4 +34,7 @@ func TestClient_Version(t *testing.T) {
 		expected,
 		output,
 	)
+	t.Cleanup(func() {
+		version.Version = originalVersion
+	})
 }
