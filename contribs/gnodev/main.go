@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/gnolang/gno/tm2/pkg/commands"
+	"github.com/gnolang/gno/tm2/pkg/crypto/keys/client"
 )
 
 func main() {
@@ -62,9 +63,9 @@ For more information and flags usage description, use 'gnodev local -h'.`,
 			return nil
 		},
 	)
-
 	cmd.AddSubCommands(localcmd)
 	cmd.AddSubCommands(NewStagingCmd(stdio))
+	cmd.AddSubCommands(client.NewVersionCmd(stdio))
 
 	// XXX: This part is a bit hacky; it mostly configures the command to
 	// use the local command as default, but still falls back on gnodev root
