@@ -12,7 +12,6 @@ import (
 )
 
 func TestClient_Version(t *testing.T) {
-
 	// Initialize stdout listener
 	mockOutput := bytes.NewBufferString("")
 	io := commands.NewTestIO()
