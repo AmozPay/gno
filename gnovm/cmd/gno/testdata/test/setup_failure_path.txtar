@@ -1,0 +1,33 @@
+# Report a per-path setup failure when an explicitly requested directory
+# has no gnomod.toml in a workspace.
+
+! gno test ./goodpkg . -v
+
+! stdout .+
+stderr 'gnomod.toml doesn''t exist'
+stderr 'FAIL    \. 	\[setup failed\]'
+stderr 'ok      \./goodpkg'
+stderr 'FAIL: 1 build errors, 0 test errors'
+
+-- gnowork.toml --
+-- goodpkg/gnomod.toml --
+module = "gno.test/p/integ/goodpkg"
+gno = "0.9"
+
+-- goodpkg/good.gno --
+package goodpkg
+
+func Value() int {
+	return 42
+}
+
+-- goodpkg/good_test.gno --
+package goodpkg
+
+import "testing"
+
+func TestValue(t *testing.T) {
+	if Value() != 42 {
+		t.Fatalf("unexpected value")
+	}
+}

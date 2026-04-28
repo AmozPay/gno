@@ -242,22 +242,8 @@ func execTest(cmd *testCmd, args []string, io commands.IO) error {
 	}
 
 	for _, pkg := range pkgs {
-		for _, err := range pkg.Errors {
-			io.ErrPrintfln("%s", err.Error())
-			buildErrCount++
-		}
-		// don't test packages with load errors
-		if len(pkg.Errors) != 0 {
-			continue
-		}
-		// don't test packages not listed in patterns
-		if len(pkg.Match) == 0 {
-			continue
-		}
-
-		// Relativize and prepend dot to pkg dir if possible
-		// We ignore errors since it's a cosmetic thing
-		// XXX: use pkg import path instead of this when printing if possible
+		// Relativize and prepend dot to pkg dir if possible.
+		// We ignore errors since it's a cosmetic thing.
 		prettyDir := pkg.Dir
 		if filepath.IsAbs(pkg.Dir) {
 			cwd, err := os.Getwd()
@@ -270,6 +256,22 @@ func execTest(cmd *testCmd, args []string, io commands.IO) error {
 					}
 				}
 			}
+		}
+
+		for _, err := range pkg.Errors {
+			io.ErrPrintfln("%s", err.Error())
+			buildErrCount++
+		}
+		// Print a per-path status line for setup failures on explicitly requested packages.
+		if len(pkg.Errors) != 0 {
+			if len(pkg.Match) != 0 {
+				io.ErrPrintfln("FAIL    %s \t[setup failed]", prettyDir)
+			}
+			continue
+		}
+		// don't test packages not listed in patterns
+		if len(pkg.Match) == 0 {
+			continue
 		}
 
 		if len(pkg.Files[packages.FileKindTest]) == 0 && len(pkg.Files[packages.FileKindXTest]) == 0 && len(pkg.Files[packages.FileKindFiletest]) == 0 {
