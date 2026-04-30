@@ -217,7 +217,9 @@ func TestHTTPHandler_Get_CanonicalizesTrailingSlashPaths(t *testing.T) {
 	}
 
 	for _, tc := range tests {
+		tc := tc
 		t.Run(strings.TrimPrefix(tc.path, "/"), func(t *testing.T) {
+			t.Parallel()
 			req := httptest.NewRequest(http.MethodGet, tc.path, nil)
 			rr := httptest.NewRecorder()
 

@@ -198,9 +198,7 @@ func canonicalPathURL(r *http.Request) string {
 		prefix, suffix, _ = strings.Cut(rawPath, "$")
 	}
 
-	if strings.HasSuffix(prefix, "/") {
-		prefix = strings.TrimSuffix(prefix, "/")
-	}
+	prefix = strings.TrimSuffix(prefix, "/")
 
 	canonical := prefix
 	if suffix != "" {
