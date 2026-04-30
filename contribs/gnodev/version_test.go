@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestClient_Version(t *testing.T) {
+func TestVersionCmd(t *testing.T) {
 	// Initialize stdout listener
 	mockOutput := bytes.NewBufferString("")
 	io := commands.NewTestIO()
@@ -19,21 +19,21 @@ func TestClient_Version(t *testing.T) {
 
 	// Initialize version command
 	versionCmd := newVersionCmd(io)
-	versionValues := []string{"develop", "chain/test4.2"}
 	originalVersion := version.Version
+	t.Cleanup(func() {
+		version.Version = originalVersion
+	})
 
 	// test: version settled
-	version.Version = versionValues[1]
+	versionValue := "chain/test4.2"
+	version.Version = versionValue
 	require.NoError(t, versionCmd.ParseAndRun(context.Background(), nil))
 
 	output := mockOutput.String()
-	expected := "gnodev version: " + versionValues[1] + "\n"
+	expected := "gnodev version: " + versionValue + "\n"
 	assert.Equal(
 		t,
 		expected,
 		output,
 	)
-	t.Cleanup(func() {
-		version.Version = originalVersion
-	})
 }
