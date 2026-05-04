@@ -16,7 +16,7 @@ func newVersionCmd(io commands.IO) *commands.Command {
 			ShortHelp:  "display installed gnodev version",
 		},
 		nil,
-		func(_ context.Context, args []string) error {
+		func(_ context.Context, _ []string) error {
 			io.Println("gnodev version:", version.Version)
 			return nil
 		},
